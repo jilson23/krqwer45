@@ -1,0 +1,6 @@
+.error{
+    border-color: '#ff0000'
+}
+.done{
+    text-decoration: overline;
+}
