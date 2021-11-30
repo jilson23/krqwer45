@@ -11,25 +11,23 @@ const tasksArr = [
 
 const App = () => {
   const [tasks, setTask] = useState(tasksArr)
+  const [value, setValue] = useState('')
   const [ifError, setIfError] = useState(false)
 
-  const handleSubmit = (x) => {
-    x.preventDefault()
+  const handleSubmit = (evento) => {
+    evento.preventDefault()
+    if(value !== ''){
+      const newTasks = {id: tasks.length + 1, name: value, done:false}
+      setTask(tasks.concat(newTasks))
+      setValue('')
+      setIfError(false)
+    } else if(value === ''){
+      setIfError(true)
+    }
   }
   
-  const handleKeyDown = (evento) => {
-    if(evento.keyCode === 13 && evento.target.value !== ''){
-
-      const newTasks = {id: tasks.length + 1, name: evento.target.value, done:false}
-      setTask(tasks.concat(newTasks))
-      evento.target.value = ''
-      setIfError(false)
-
-    } else if(evento.keyCode === 13 && evento.target.value === ''){
-
-      setIfError(true)
-
-    }
+  const handleChange = ({target}) => {
+    setValue(target.value)
   }
 
   const handleClick = (id) => {
@@ -53,7 +51,7 @@ const App = () => {
           {tasks.map((task, index) => <li onClick={() => handleClick(task.id)} className={task.done? 'done' : null} key={task.id}>{task.name}</li>)}
         </ul>
         <form onSubmit={handleSubmit}>
-          <input type="text" id="new-task" className={ifError? 'error' : null} onKeyDown={handleKeyDown} placeholder="Ingresa una tarea y oprime Enter" />
+          <input type="text" id="new-task" value={value} className={ifError? 'error' : null} onChange={handleChange} placeholder="Ingresa una tarea y oprime Enter" />
         </form>
       </div>
     </div>
